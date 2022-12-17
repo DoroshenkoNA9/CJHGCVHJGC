@@ -1,0 +1,95 @@
+CREATE TABLE IF NOT EXISTS company(
+    id INTEGER PRIMARY KEY,
+    name_company VARCHAR(100) NOT NULL UNIQUE,
+    address VARCHAR(100) NOT NULL,
+    telephone VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    note VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS client(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
+    telephone VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    note VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS type_of_service(
+    id INTEGER PRIMARY KEY,
+    title VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS service(
+    id INTEGER PRIMARY KEY,
+    title VARCHAR(100) NOT NULL UNIQUE,
+    type_id INTEGER NOT NULL,
+    description VARCHAR(100),
+    FOREIGN KEY (type_id)
+        REFERENCES type_of_service(id)
+        ON DELETE SET NULL ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS post(
+    id INTEGER PRIMARY KEY,
+    name_post VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS department(
+    id INTEGER PRIMARY KEY,
+    name_department VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS material(
+    id INTEGER PRIMARY KEY,
+    name_material VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS staff(
+    id INTEGER PRIMARY KEY,
+    post_id INTEGER NOT NULL,
+    department_id INTEGER NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
+    passport_data VARCHAR(100) NOT NULL UNIQUE,
+    address VARCHAR(100) NOT NULL UNIQUE,
+    telephone VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    note VARCHAR(100),
+    FOREIGN KEY (post_id)
+        REFERENCES post(id)
+        ON DELETE SET NULL ON UPDATE NO ACTION,
+    FOREIGN KEY (department_id)
+        REFERENCES department(id)
+        ON DELETE SET NULL ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS record(
+    id INTEGER PRIMARY KEY,
+    company_id INTEGER NOT NULL,
+    client_id INTEGER NOT NULL,
+    staff_id INTEGER NOT NULL,
+    service_id INTEGER NOT NULL,
+    material_id INTEGER NOT NULL,
+    date_of_work DATE NOT NULL,
+    start_time VARCHAR(100) NOT NULL,
+    end_time VARCHAR(100) NOT NULL,
+    price INTEGER NOT NULL,
+    note VARCHAR(100),
+    FOREIGN KEY (company_id)
+        REFERENCES company(id)
+        ON DELETE SET NULL ON UPDATE NO ACTION,
+    FOREIGN KEY (client_id)
+        REFERENCES client(id)
+        ON DELETE SET NULL ON UPDATE NO ACTION,
+    FOREIGN KEY (staff_id)
+        REFERENCES staff(id)
+        ON DELETE SET NULL ON UPDATE NO ACTION,
+    FOREIGN KEY (service_id)
+        REFERENCES service(id)
+        ON DELETE SET NULL ON UPDATE NO ACTION,
+    FOREIGN KEY (material_id)
+        REFERENCES material(id)
+        ON DELETE SET NULL ON UPDATE NO ACTION
+);
